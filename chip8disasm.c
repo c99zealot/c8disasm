@@ -1,4 +1,3 @@
-// TODO show where ret instructions are returning to
 // NOTE instructions marked with XXX are superchip extensions and some are unrecognised
 
 #include <stdio.h>
