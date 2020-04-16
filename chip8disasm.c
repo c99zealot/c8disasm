@@ -39,6 +39,7 @@ int main(int argc, char **argv) {
                                         case 0xE0:
                                                 puts("cls");
                                                 break;
+
                                         default:
                                                 if (current_instruction == 0) {
                                                         puts("<end of file>");
