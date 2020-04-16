@@ -1,5 +1,3 @@
-// NOTE instructions marked with XXX are superchip extensions and some are unrecognised
-
 #include <stdio.h>
 #include <stdint.h>
 
@@ -12,9 +10,7 @@
 
 FILE *input_file;
 uint16_t current_byte, current_instruction = 1;
-uint16_t call_stack[256];
 uint8_t file_buffer[4096];
-uint8_t stack_pointer;
 
 int main(int argc, char **argv) {
         if (argc < 2) {
@@ -28,7 +24,7 @@ int main(int argc, char **argv) {
         }
 
         while (current_byte < 4096) {
-                fprintf(stdout, (current_byte <= 0xff) ? "|  0x%X  |   " : "|  0x%X  |  ", current_byte + 512);
+                fprintf(stdout, "|  0x%X  |  ", current_byte + 512);
 
                 // fetch next instruction
                 current_instruction = (file_buffer[current_byte] << 8) | file_buffer[current_byte + 1];
@@ -37,16 +33,12 @@ int main(int argc, char **argv) {
                 switch (current_instruction & 0xF000) {
                         case 0x0000:
                                 switch (NN) {
-                                        case 0xC0:        // 0x00CN XXX
-                                                printf("scd 0x%X\n", N);
+                                        case 0xEE:         // 0x00EE
+                                                puts("ret");
                                                 break;
-                                        case 0xE0:        // 0x00E0
+                                        case 0xE0:
                                                 puts("cls");
                                                 break;
-                                        case 0xEE:        // 0x00EE
-                                                printf("ret (0x%X)\n", call_stack[stack_pointer--]);
-                                                break;
-
                                         default:
                                                 if (current_instruction == 0) {
                                                         puts("<end of file>");
@@ -55,30 +47,10 @@ int main(int argc, char **argv) {
                                                         puts("???");
                                 }
                                 break;
-                        case 0xF0:  
-                                switch (N) {
-                                        case 0xB:        // 0x00FB XXX
-                                                puts("scr");
-                                                break;                 
-                                        case 0xC:        // 0x00FC XXX
-                                                puts("scl");
-                                                break;                 
-                                        case 0xE:        // 0x00FE XXX
-                                                puts("low");
-                                                break;                 
-                                        case 0xF:        // 0x00FF XXX
-                                                puts("high");
-                                                break;
-
-                                        default:
-                                                puts("???");
-                                }
-                                break;
                         case 0x1000:        // 0x1NNN
                                 printf("jmp 0x%X\n", NNN);
                                 break;
                         case 0x2000:        // 0x2NNN
-                                call_stack[++stack_pointer] = current_byte + 514;
                                 printf("call 0x%X\n", NNN);
                                 break;
                         case 0x3000:        // 0x3XNN
@@ -175,8 +147,6 @@ int main(int argc, char **argv) {
                                         case 0x9:       // 0xFX29
                                                 printf("ldf V%X\n", X);
                                                 break;
-                                        case 0x0:       // 0xFX30 XXX
-                                                break;
                                         case 0x3:       // 0xFX33
                                                 printf("bcd V%X\n", X);
                                                 break;
@@ -190,10 +160,6 @@ int main(int argc, char **argv) {
                                                                 break;
                                                         case 0x6:       // 0xFX65
                                                                 printf("st V%X\n", X);
-                                                                break;
-                                                        case 0x7:       // 0xFX75 XXX
-                                                                break;
-                                                        case 0x8:       // 0xFX85 XXX
                                                                 break;
 
                                                         default:
