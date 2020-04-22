@@ -1,9 +1,9 @@
-# Chip8disasm
+# C8disasm
 
 ## usage:
 ```
-cc chip8disasm.c
+cc c8disasm.c
 ./a.out <chip8 rom>
 ```
 ## notes:
-- program counter values are displayed to the left of the disassembly in chip8disasm output
+- program counter values are displayed to the left of the disassembly in c8disasm output

@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
                 switch (current_instruction & 0xF000) {
                         case 0x0000:
                                 switch (NN) {
-                                        case 0xEE:         // 0x00EE
+                                        case 0xEE:        // 0x00EE
                                                 puts("ret");
                                                 break;
                                         case 0xE0:
