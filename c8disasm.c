@@ -24,10 +24,10 @@ int main(int argc, char **argv) {
         }
 
         while (current_byte < 4096) {
-                fprintf(stdout, "|  0x%X  |  ", current_byte + 512);
-
                 // fetch next instruction
                 current_instruction = (file_buffer[current_byte] << 8) | file_buffer[current_byte + 1];
+
+                fprintf(stdout, "0x%X | ", current_byte + 512);
 
                 // decode and display fetched instruction
                 switch (current_instruction & 0xF000) {
@@ -157,10 +157,10 @@ int main(int argc, char **argv) {
                                                                 printf("mov dtimer, V%X\n", X);
                                                                 break;
                                                         case 0x5:       // 0xFX55
-                                                                printf("ld V%X\n", X);
+                                                                printf("str V%X\n", X);
                                                                 break;
                                                         case 0x6:       // 0xFX65
-                                                                printf("st V%X\n", X);
+                                                                printf("lod V%X\n", X);
                                                                 break;
 
                                                         default:
